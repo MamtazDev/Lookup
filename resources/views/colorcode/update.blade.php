@@ -1,0 +1,77 @@
+@extends('layouts.app')
+
+@section('title')
+   Update Color
+@endsection
+
+@section('main')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<div class="container">
+    <div class="justify-content-center">
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <strong>Opps!</strong> Something went wrong, please check below errors.<br><br>
+               <!--  <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul> -->
+            </div>
+        @endif
+        <div class="card">
+            <div class="card-header">
+                 @can('colors-create')
+                <span class="float-right">
+                    <a class="btn btn-primary btn-radius" href="{{ route('frames.index') }}">See all Colors</a>
+                </span>
+                @endcan
+            </div>
+            <div class="card-body">
+                 {!! Form::model($frames, ['route' => ['colors.update', $frames->id], 'method'=>'PATCH']) !!}
+
+                 <div class="row">
+                    
+                    <div class="col-md-3">
+                        
+                    </div>
+                    <div class="col-md-6">
+
+                               <div class="form-group">
+                                    <strong>Name:</strong>
+                                    {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
+                                     @if($errors->has('name'))
+                                <div class="error">{{ $errors->first('name') }}</div>
+                               @endif
+                                </div>
+                                <div class="row clearfix m-t-20">
+                                 <div class="form-group">
+                            <strong>Select your color:</strong>
+                            <br>
+                                          
+                            <input type="color" id="favcolor" name="colorcode" value="{{ $frames->colorcode }}">
+                                </div>
+                                         
+                                        
+                                    </div>
+                        
+                    </div>
+                      <div class="col-md-3">
+                        
+                    </div>
+
+                    </div>
+              
+
+             
+                 
+                    <button type="submit" class="btn btn-primary" style="margin-left: 45%;">Submit</button>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@endsection

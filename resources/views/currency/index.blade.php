@@ -1,0 +1,101 @@
+@extends('layouts.app')
+
+@section('title')
+    All Currency rates
+@endsection
+
+@section('main')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+ <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+@if ($message = Session::get('success'))
+<div class="alert alert-success">
+<p>{{ $message }}</p>
+</div>
+@endif
+<div class="card">
+    
+    <div class="card-header">
+               
+               {{--@can('currency-create')--}}
+                 <span class="float-right">
+                        <a class="btn btn-primary btn-radius" href="{{ route('currency.create') }}">Add new Currency rate</a>
+                    </span>
+               {{--@endcan--}}
+              </div>
+               <div class="card-body">
+                <table class="table table-hover" id="datatable">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Currency code</th>
+                            <th>Currency rate</th>
+                    
+                            <th width="280px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($data as $key => $type)
+                            <tr>
+                                <td>{{ $type->id }}</td>
+                                <td>{{ $type->Currency_code }}</td>
+                                <td>{{ $type->currency_rate }}</td>
+                              
+                                <!-- <td>
+                                   <div class="form-group">
+                        <input data-id="{{$type->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $type->isactive ? 'checked' : '' }}>
+                   </div>
+                   @error('status')
+                    <div class="alert alert-danger">{{$message}}</div>
+                    @enderror
+                                </td> -->
+                                <td>
+                                   
+                                    @can('currency-edit')
+                                        <a class="btn btn-primary" href="{{ route('currency.edit',$type->id) }}"><i class="fa fa-edit"></i> </a>
+                                    @endcan
+                                    @can('currency-delete')
+                                     <form method="POST" action="{{ route('currency.destroy', $type->id) }}" style="display: inline-block">
+                            @csrf
+                            <input name="_method" type="hidden" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-flat show_confirm" data-toggle="tooltip" title='Delete'><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        </form>
+                                    
+                                    @endcan
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                {{ $data->render() }}
+            </div>
+        </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+<script type="text/javascript">
+ 
+     $('.show_confirm').click(function(event) {
+          var form =  $(this).closest("form");
+          var name = $(this).data("name");
+          event.preventDefault();
+          swal({
+              title: `Are you sure you want to delete this record?`,
+              text: "If you delete this, it will be gone forever.",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              form.submit();
+            }
+          });
+      });
+  
+</script>
+<script>
+        $(document).ready( function () {
+            $.noConflict();
+            $('#datatable').dataTable();
+        });
+    </script>
+@endsection

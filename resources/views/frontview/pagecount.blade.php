@@ -1,0 +1,1 @@
+Showing {{($ArtistDataArr->currentPage()-1)* $ArtistDataArr->perPage()+($ArtistDataArr->total() ? 1:0)}} to {{($ArtistDataArr->currentPage()-1)*$ArtistDataArr->perPage()+count($ArtistDataArr)}} of {{$ArtistDataArr->total()}} ({{$ArtistDataArr->currentPage()}} Pages)
