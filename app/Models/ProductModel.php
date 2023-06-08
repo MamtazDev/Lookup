@@ -72,6 +72,12 @@ class ProductModel extends Model
    {
     return $this->hasMany('App\Models\ProductCategoryModel', 'parentcatid');
    }   
+
+    public function artists()
+   {
+    return $this->belongsTo('App\Models\ArtistModel', 'artistid');
+   }   
+
    public function cattype()
    {
     return $this->hasMany('App\Models\ProductCategoryModel', 'categorytypeid');

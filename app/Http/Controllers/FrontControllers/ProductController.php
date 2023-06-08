@@ -8,6 +8,7 @@ use Request;
 use App\Models\ProductModel;
 use App\Models\ProductCategoryModel;
 use App\Models\CategoryTypeModel;
+use App\Models\CurrencyModel;
 use App\Models\OrientationModel;
 use App\Models\ColorCodeModel;
 use App\Models\SizeModel;
@@ -36,6 +37,7 @@ class ProductController extends FrontController
 
     public function details($alias)
     {
+
         if(isset($alias) && !empty($alias)){
         $data = [];
         $products = ProductModel::getProdectsdetailsbyId($alias);
@@ -59,6 +61,7 @@ class ProductController extends FrontController
         }else{
             $RatingData = 0;
         }
+        $currencies = CurrencyModel::get();
 
         $data['relatedProducts'] = $relatedProducts;
         $data['products'] = $products;
@@ -68,6 +71,9 @@ class ProductController extends FrontController
         $data['productsbrands'] = $productsbrands;
         $data['productsFrames'] = $productsFrames;
         $data['ProductCategoryData'] = $ProductCategoryData;
+        $data['currencies'] = $currencies;
+
+        // return $products->artists;
         return view('frontview.product-detail',$data);
          }else{
             abort(404);

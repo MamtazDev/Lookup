@@ -111,6 +111,11 @@
               <div class="col-sm-6 right_info">
                 <div class="right-info-inner">
                   <h1 class="">{{ $products['title'] }}</h1>
+
+                  @isset($products->artists)
+                  <div ><a href="{{  url('/artist-details').'/'.$products->artists->slug  }}" style="margin-right:5px;display:inline-block; text-decoration:underline;font-weight:bold;font-size:18px" >{{ $products->artists->firstname ?? "Unknown" }} {{ $products->artists->lastname ?? ""}}</a> <span>{{$products->artists->created_at->format('Y')  }}</span></div>
+                  @endisset 
+                
                   <div class="rating">
                     <div class="product-rating">
                       @php $star1 = '-o'; @endphp
@@ -153,107 +158,37 @@
                     <li><span class="disc">Availability:</span><span class="disc1"> {{$products['availability']}}</span></li>
                   </ul>
                   <hr />
+                  @php
+           
+
+                   if(isset($_COOKIE['selectCurrancy']) && !empty($_COOKIE['selectCurrancy'])){
+                    $currencyCode = $_COOKIE['selectCurrancy'];
+                  }else{
+                    $currencyCode = 'USD';
+                  }
+                  // $currency == $currency['Currency_code']
+          
+             
+                 @endphp
                   <ul class="list-unstyled">
                     <li>
                       @if(isset($products['saleprice']) && !empty($products['saleprice']) && $products['saleprice'] > 0)
-                      <span class="pro_price">{{ $mylibrary->currencyconverterallprice($products['saleprice']) }}</span><span class="pro_oldprice" style="text-decoration: line-through;">{{ $mylibrary->currencyconverterallprice($products['price']) }}</span>
+                      <span class="pro_price">{{ $mylibrary->currencyconverterallpriceChange($products['saleprice']) }}</span><span class="pro_oldprice" style="text-decoration: line-through;">{{ $mylibrary->currencyconverterallprice($products['price']) }}</span>
                       @else
-                      <!-- <span class="pro_price sign">{{ $mylibrary->currencyconverterallprice($products['price']) }}</span> -->
-
-                      <span class="pro_price sign">{{ $mylibrary->currencyconverterallprice($products['price']) }}</span>
+                      {{-- <span class="pro_price sign">{{ $mylibrary->currencyconverterallprice($products['price']) }}</span> --}}
+                      <span class="pro_price sign">{{$mylibrary->currencyconverterallpriceChange($products['price'])}}</span>
                         <!-- Currrency -->
-                        <!-- {{ substr($mylibrary->currencyconverterallprice($products['price']),0,3) }} -->
+                        <!-- {{ substr($mylibrary->currencyconverterallpriceChange($products['price']),0,3) }} -->
                          <form style="margin-top: -20px;">
-     
-        <select class="currency" style="margin-left: 150px;">
-            <!-- <option value="">Currency</option> -->
-            <option value="AED" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='AED') echo 'selected'; ?>>AED</option>
-            <option value="ARS" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='ARS') echo 'selected'; ?>>ARS</option>
-            <option value="AUD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='AUD') echo 'selected'; ?>>AUD</option>
-            <option value="BDT" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='BDT') echo 'selected'; ?>>BDT</option>
-            <option value="BGN" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='BGN') echo 'selected'; ?>>BGN</option>
-            <option value="BHD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='BHD') echo 'selected'; ?>>BHD</option>
-            <option value="BND" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='BND') echo 'selected'; ?>>BND</option>
-            <option value="BOB" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='BOB') echo 'selected'; ?>>BOB</option>
-             <option value="BRL" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='BRL') echo 'selected'; ?>>BRL</option>
-             <option value="BWP" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='BWP') echo 'selected'; ?>>BWP</option>
-             <option value="BYN" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='BYN') echo 'selected'; ?>>BYN</option>
-             <option value="BYN" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='BYN') echo 'selected'; ?>>BYN</option>
-             <option value="CAD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='CAD') echo 'selected'; ?>>CAD</option>
-             <option value="CHF" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='CHF') echo 'selected'; ?>>CHF</option>
-             <option value="CLP" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='CLP') echo 'selected'; ?>>CLP</option>
-            <option value="CNY" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='CNY') echo 'selected'; ?>>CNY</option>
-            <option value="COP" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='COP') echo 'selected'; ?>>COP</option>
-            <option value="CRC" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='CRC') echo 'selected'; ?>>CRC</option>
-            <option value="CZK" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='CZK') echo 'selected'; ?>>CZK</option>
-            <option value="DKK" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='DKK') echo 'selected'; ?>>DKK</option>
-            <option value="DOP" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='DOP') echo 'selected'; ?>>DOP</option>
-            <option value="DZD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='DZD') echo 'selected'; ?>>DZD</option>
-            <option value="EGP" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='EGP') echo 'selected'; ?>>EGP</option>
-            <option value="EUR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='EUR') echo 'selected'; ?> >EUR</option>
-            <option value="FJD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='FJD') echo 'selected'; ?>>FJD</option>
-            <option value="GBP" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='GBP') echo 'selected'; ?>>GBP</option>
-            <option value="GEL" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='GEL') echo 'selected'; ?>>GEL</option>
-            <option value="GHS" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='GHS') echo 'selected'; ?>>GHS</option>
-            <option value="HKD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='HKD') echo 'selected'; ?>>HKD</option>
-            <option value="HRK" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='HRK') echo 'selected'; ?>>HRK</option>
-            <option value="HUF" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='HUF') echo 'selected'; ?>>HUF</option>
-            <option value="IDR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='IDR') echo 'selected'; ?>>IDR</option>
-            <option value="ILS" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='ILS') echo 'selected'; ?>>ILS</option>
-            <option value="INR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='INR') echo 'selected'; ?>>INR</option>
-             <option value="IQD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='IQD') echo 'selected'; ?>>IQD</option>
-             <option value="JOD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='JOD') echo 'selected'; ?>>JOD</option>
-             <option value="JPY" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='JPY') echo 'selected'; ?>>JPY</option>
-             <option value="KES" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='KES') echo 'selected'; ?>>KES</option>
-             <option value="KRW" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='KRW') echo 'selected'; ?>>KRW</option>
-             <option value="KWD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='KWD') echo 'selected'; ?>>KWD</option>
-             <option value="KZT" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='KZT') echo 'selected'; ?>>KZT</option>
-             <option value="LBP" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='LBP') echo 'selected'; ?>>LBP</option>
-             <option value="LKR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='LKR') echo 'selected'; ?>>LKR</option>
-             <option value="LTL" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='LTL') echo 'selected'; ?>>LTL</option>
-             <option value="MAD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='MAD') echo 'selected'; ?>>MAD</option>
-             <option value="MMK" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='MMK') echo 'selected'; ?>>MMK</option>
-             <option value="MOP" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='MOP') echo 'selected'; ?>>MOP</option>
-             <option value="MUR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='MUR') echo 'selected'; ?>>MUR</option>
-             <option value="MXN" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='MXN') echo 'selected'; ?>>MXN</option>
-             <option value="MYR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='MYR') echo 'selected'; ?>>MYR</option>
-             <option value="NAD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='NAD') echo 'selected'; ?>>NAD</option>
-             <option value="NIO" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='NIO') echo 'selected'; ?>>NIO</option>
-             <option value="NOK" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='NOK') echo 'selected'; ?>>NOK</option>
-             <option value="NPR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='NPR') echo 'selected'; ?>>NPR</option>
-             <option value="NZD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='NZD') echo 'selected'; ?>>NZD</option>
-             <option value="OMR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='OMR') echo 'selected'; ?>>OMR</option>
-             <option value="PEN" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='PEN') echo 'selected'; ?>>PEN</option>
-             <option value="PHP" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='PHP') echo 'selected'; ?>>PHP</option>
-             <option value="PKR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='PKR') echo 'selected'; ?>>PKR</option>
-             <option value="PLN" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='PLN') echo 'selected'; ?>>PLN</option>
-             <option value="PYG" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='PYG') echo 'selected'; ?>>PYG</option>
-             <option value="QAR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='QAR') echo 'selected'; ?>>QAR</option>
-             <option value="RON" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='RON') echo 'selected'; ?>>RON</option>
-             <option value="RSD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='RSD') echo 'selected'; ?>>RSD</option>
-             <option value="RUB" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='RUB') echo 'selected'; ?>>RUB</option>
-             <option value="SAR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='SAR') echo 'selected'; ?>>SAR</option>
-             <option value="SEK" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='SEK') echo 'selected'; ?>>SEK</option>
-             <option value="SGD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='SGD') echo 'selected'; ?>>SGD</option>
-             <option value="SVC" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='SVC') echo 'selected'; ?>>SVC</option>
-             <option value="THB" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='THB') echo 'selected'; ?>>THB</option>
-             <option value="TND" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='TND') echo 'selected'; ?>>TND</option>
-             <option value="TRY" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='TRY') echo 'selected'; ?>>TRY</option>
-             <option value="TWD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='TWD') echo 'selected'; ?>>TWD</option>
-             <option value="TZS" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='TZS') echo 'selected'; ?>>TZS</option>
-             <option value="UAH" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='UAH') echo 'selected'; ?>>UAH</option>
-             <option value="UGX" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='UGX') echo 'selected'; ?>>UGX</option>
-             <option value="UGX" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='UGX') echo 'selected'; ?>>UGX</option>
-             <option value="USD" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='USD') echo 'selected'; ?>>USD</option>
-             <option value="UYU" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='UYU') echo 'selected'; ?>>UYU</option>
-             <option value="UZS" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='UZS') echo 'selected'; ?>>UZS</option>
-             <option value="VEF" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='VEF') echo 'selected'; ?>>VEF</option>
-             <option value="VES" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='VES') echo 'selected'; ?>>VES</option>
-             <option value="VND" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='VND') echo 'selected'; ?>>VND</option>
-             <option value="XOF" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='XOF') echo 'selected'; ?>>XOF</option>
-             <option value="ZAR" <?php if(substr($mylibrary->currencyconverterallprice($products['price']),0,3)=='ZAR') echo 'selected'; ?>>ZAR</option>
-            
-        </select>
+                      
+              <select class="currency" style="margin-left: 150px;">
+                  <!-- <option value="">Currency</option> -->
+                  @foreach ($currencies as $currency)
+                  <option value="{{ $currency['Currency_code'] }}" {{ $currencyCode === $currency['Currency_code'] ? "selected": "" }}>{{ $currency['Currency_code'] }}</option>
+                  @endforeach
+               
+                
+              </select>
     </form>
                               <!-- <div class="dropdown">
                               <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="color: white;">Currency
@@ -1062,7 +997,6 @@ $(document).ready(function(){
     $("select.currency").change(function(){
         var selectedCountry = $(this).children("option:selected").val();
         // alert("You have selected the country - " + selectedCountry);
-
         changeCurrancy(selectedCountry);
     });
 

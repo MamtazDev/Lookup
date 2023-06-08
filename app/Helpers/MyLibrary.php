@@ -14,14 +14,9 @@ use DB;
 
 class MyLibrary {
 
-
-
   public static function currencyconverter($currency,$amount){
-
     if($currency == 'USD'){
-
         return $amount;
-
        }else{
         $rates = DB::table('currencyrate')
             ->select('currency_rate')
@@ -40,11 +35,8 @@ class MyLibrary {
         // return $convertedAmount;
        }
 
-        
 
   }
-
-
 
     public static function currencyconverterallprice($amount){
 
@@ -76,7 +68,6 @@ class MyLibrary {
         // $exhangeRate = (float) substr($data[1],0,7);
         // $convertedAmount = $amount*$exhangeRate;
         // $response =  $convertedAmount;
-
        }
        elseif($currency =='AED'){
         // $sign = '€';
@@ -3135,14 +3126,14 @@ class MyLibrary {
   //       $convertedAmount = $amount*$exhangeRate;
   //       $response= $convertedAmount;
   //      }
-
+   else{
+    $sign = 'USD ';
+    $rates = '';
+    $response =500;
+   }
        $response = number_format((float)$response, 2, '.', '');
-
-       
-
        $response = $response;
-
-        return $response;
+        return $response ;
 
   } 
 
@@ -3188,6 +3179,27 @@ class MyLibrary {
 
   }
 
+  public static function currencyconverterallpriceChange($amount){
+
+    if(isset($_COOKIE['selectCurrancy']) && !empty($_COOKIE['selectCurrancy'])){
+      $currency = $_COOKIE['selectCurrancy'];
+    }else{
+      $currency = 'USD';
+    }
+    if($currency == 'USD'){
+        $response = $amount;
+   }else{
+    $rates = '';
+    $rates = DB::table('currencyrate')
+        ->select('currency_rate')
+        ->where('Currency_code',$currency)
+        ->first();
+    $response = $rates->currency_rate * $amount;
+   }
+   $response = number_format((float)$response, 2, '.', '');
+   $response = $response;
+    return $response ;
+}
 
 
 }

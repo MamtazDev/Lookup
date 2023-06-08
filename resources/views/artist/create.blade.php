@@ -447,7 +447,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-  if (window.File && window.FileList && window.FileReader) {
+  if (File && FileList && FileReader) {
     $("#files").on("change", function(e) {
       var files = e.target.files,
         filesLength = files.length;

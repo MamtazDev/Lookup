@@ -201,19 +201,24 @@ class ArtistController extends FrontController
 
     Public static function ArtistDetails($slug){
         $ArtistData = ArtistModel::getArtistDatabyslug($slug);
-        $RelatedProdects = ProductModel::getrelatedProductsbyArtiest($ArtistData->id);
-        $catIds = [];
-        foreach($RelatedProdects as $prodectcat){
-            if(!in_array($prodectcat->categoryid, $catIds)){
-                $catIds[] = $prodectcat->categoryid;
+        if($ArtistData){
+            $RelatedProdects = ProductModel::getrelatedProductsbyArtiest($ArtistData->id);
+            $catIds = [];
+            foreach($RelatedProdects as $prodectcat){
+                if(!in_array($prodectcat->categoryid, $catIds)){
+                    $catIds[] = $prodectcat->categoryid;
+                }
             }
+            
+            $catalist = ProductCategoryModel::getProductCategorylistByIds($catIds);
+            $data['ArtistDataArr'] = $ArtistData;
+            $data['RelatedProdects'] = $RelatedProdects;
+            $data['catalist'] = $catalist;
+            return view('frontview.artist-profile',$data);
+        }else{
+            return "Artists Not Found";
         }
-        
-        $catalist = ProductCategoryModel::getProductCategorylistByIds($catIds);
-        $data['ArtistDataArr'] = $ArtistData;
-        $data['RelatedProdects'] = $RelatedProdects;
-        $data['catalist'] = $catalist;
-        return view('frontview.artist-profile',$data);
+       
     }
 
 
