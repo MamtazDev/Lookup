@@ -148,7 +148,7 @@ $seo = SeoModel::get()->where('id',1)->first();
                                                                         @if($prodects->artistid == "0")
                                                                             <img class="img-responsive hover-img" src="{{ url($imageArr[0]) }}" title="{{ $prodects->title }}" alt="{{ $prodects->title }}" />
                                                                         @else
-                                                                            <img class="img-responsive hover-img" src="{{ url('Artist/'.$imageArr[0]) }}" title="{{ $prodects->title }}" alt="{{ $prodects->title }}" />
+                                                                            <img class="img-responsive hover-img" src="{{ url('https://lakouphoto.ca/Artist/public/image/products/'.$imageArr[0]) }}" title="{{ $prodects->title }}" alt="{{ $prodects->title }}" />
                                                                         @endif
                                                                     @else
                                                                         @if($prodects->featuredimage)
@@ -601,7 +601,7 @@ $seo = SeoModel::get()->where('id',1)->first();
                                                             @if ($SpecialProducts->artistid == "0")
                                                                 <img class="img-responsive hover-img" src="{{ url($imageArr[0]) }}" title="{{ $SpecialProducts->title }}" alt="{{ $SpecialProducts->title }}" />
                                                             @else
-                                                                <img class="img-responsive hover-img" src="{{ url('Artist/'.$imageArr[0]) }}" title="{{ $SpecialProducts->title }}" alt="{{ $SpecialProducts->title }}" />
+                                                                <img class="img-responsive hover-img" src="{{ url('https://lakouphoto.ca/Artist/'.$imageArr[0]) }}" title="{{ $SpecialProducts->title }}" alt="{{ $SpecialProducts->title }}" />
                                                             @endif
                                                             @else
                                                                 @if($SpecialProducts->featuredimage)
@@ -623,7 +623,6 @@ $seo = SeoModel::get()->where('id',1)->first();
                                                                 $pid = $SpecialProducts->id;
                                                                 if (isset($Front_user_id) && !empty($Front_user_id)) {
                                                                     
-
                                                                     if (in_array($pid, $Userwishlist)) {
                                                                         $activeClass = 'active';
                                                                         $RemoveClass = 'remove_heart';
