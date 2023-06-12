@@ -3172,15 +3172,11 @@ class MyLibrary {
             $RatingData = 0;
 
         }
-
-
-
       return $RatingData;  
 
   }
 
   public static function currencyconverterallpriceChange($amount){
-
     if(isset($_COOKIE['selectCurrancy']) && !empty($_COOKIE['selectCurrancy'])){
       $currency = $_COOKIE['selectCurrancy'];
     }else{

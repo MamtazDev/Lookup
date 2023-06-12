@@ -13,6 +13,7 @@ use App\Models\OrientationModel;
 use App\Models\ColorCodeModel;
 use App\Models\SizeModel;
 use App\Models\ProductFrameModel;
+use App\Models\ArtistModel;
 use Redirect,Response;
 use DB;
 
@@ -73,7 +74,9 @@ class ProductController extends FrontController
         $data['ProductCategoryData'] = $ProductCategoryData;
         $data['currencies'] = $currencies;
 
-        // return $products->artists;
+        $artists = ArtistModel::find($products->artists);
+        $data['country'] = $artists[0]->country;
+            // return $products->artists;
         return view('frontview.product-detail',$data);
          }else{
             abort(404);

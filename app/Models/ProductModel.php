@@ -76,7 +76,9 @@ class ProductModel extends Model
     public function artists()
    {
     return $this->belongsTo('App\Models\ArtistModel', 'artistid');
-   }   
+   }  
+    
+   
 
    public function category()
    {

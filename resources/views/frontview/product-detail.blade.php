@@ -112,12 +112,16 @@
                       $in = $cm/2.54;
                         return round($in,2);
                     }
+              
               @endphp   
               <div class="col-sm-6 right_info">
                 <div class="right-info-inner">
                   <h1 class="">{{ $products['title'] }}</h1>
                   @isset($products->artists)
-                  <div ><a href="{{  url('/artist-details').'/'.$products->artists->slug  }}" style="margin-right:5px;display:inline-block; text-decoration:underline;font-weight:bold;font-size:18px" >{{ $products->artists->firstname ?? "Unknown" }} {{ $products->artists->lastname ?? ""}}</a> <span>{{$products->artists->created_at->format('Y')  }}</span></div>
+                  <div ><a href="{{  url('/artist-details/'.$products->artists->slug)  }}" style="margin-right:5px;display:inline-block; text-decoration:underline;font-weight:bold;font-size:18px" >{{ $products->artists->firstname ?? "" }} {{ $products->artists->lastname ?? ""}},</a> 
+                    <span>{{ $country['countryname'] }},{{$products->artists->created_at->format('Y')  }}</span>
+
+                  </div>
                   @endisset
                   <p style="margin-top:8px" > {{$products['shortdescription'] }} <span>{{cmToIn($products['width'])  }} </span>X<span> {{ cmToIn($products['height']) }}in</span></p> 
                   
@@ -346,8 +350,11 @@
                   </p>
                   <h2  style="margin-bottom:25px">Specification Details </h2>
                     <ul>
+
+                      @isset($products['shortdescription'])
                       <li style="display:flex;gap:100px;align-items:center;border-bottom:1px solid #eeeeee36;margin-bottom:20px "><p>Printing</p> <p> {{ $products['shortdescription'] }}</p>
                       </li>
+                      @endisset               
                       <li style="display:flex;gap:100px;align-items:center;border-bottom:1px solid #eeeeee36 ;margin-bottom:20px"><p>Framing</p> <p> 
                         Framing on request</p>
                       </li>
@@ -419,35 +426,37 @@
             </div>
           </div>
           <div class="about-the-creator-section mt-5">
-              <div class="row">
-                <div class="col-md-3">
-                  <h2>About the Creator</h2>
-                  <div class="creatorWrapper">
-                    <a href="{{  url('/artist-details').'/'.$products->artists->slug  }}">{{ $products->artists->firstname ?? "Unknown" }} {{ $products->artists->lastname ?? ""}}
-                  
-                      <img src="{{ url('image/artist/').'/'.$products->artists->media}}" height="100" alt="creator">
-                      <div class="creator_info">
-                          <h3>{{  $products->artists->firstname ?? "" }}</h3>
-                          <p>Creator Address</p>
-                      </div>
-                    </a> 
-                  </div>
-                  <div  class="creator-credentials">
-                    <ul>
-                      <li>International Exposure  </li>
-                      <li>Experienced Artist     </li>
-                      <li>Works on commission  </li>
-                  </ul>
-                  </div>
+            <div class="row">
+              <div class="col-md-3">
+                <h2>About the Creator</h2>
+                <div class="creatorWrapper">
+                  <a href="{{  url('/artist-details/'.$products->artists->slug) }}">
+                    <img src="{{ url('image/artist/'.$products->artists->media)}}" height="100" alt="creator">
+                    <div class="creator_info">
+                        <h3>{{  $products->artists->firstname ?? "" }} {{ $products->artists->lastname ?? ""}}</h3>
+                        <p>{{ $country['countryname']  }}</p>
+                    </div>
+                  </a> 
                 </div>
-                <div class="col-md-5">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit harum repellat molestias ipsum. Expedita, perferendis placeat qui, accusamus exercitationem asperiores praesentium repellendus id quisquam dolorum rem harum? Fugit, atque officia!</p>
-                </div>
-                <div class="col-md-4">
-                  <img src="" alt="">
+                <div  class="creator-credentials">
+                  <h3>Credentials</h3>
+                  <ul>
+                    <li>International Exposure  </li>
+                    <li>Experienced Artist     </li>
+                    <li>Works on commission  </li>
+                </ul>
                 </div>
               </div>
-          </div>
+              <div class="col-md-5">
+                  <p style="padding-top:20%">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit harum repellat molestias ipsum. Expedita, perferendis placeat qui, accusamus exercitationem asperiores praesentium repellendus id quisquam dolorum rem harum? Fugit, atque officia!</p>
+
+                  <a style="font-weight: bold;margin-top:30px" href="{{  url('/artist-details/'.$products->artists->slug) }}"> Go to {{  $products->artists->firstname ?? "" }} {{ $products->artists->lastname ?? ""}} Page </a>
+
+            </div>
+            <div class="col-md-4">
+              <img src="{{ url('image/artist/'.$products->artists->media)}}"  width="100%" alt="">
+            </div>
+        </div>
           @if(isset($relatedProducts) && !empty($relatedProducts))
           <div class="related-products-block">
             <div class="box-content box">

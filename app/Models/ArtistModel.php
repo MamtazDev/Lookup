@@ -54,6 +54,7 @@ class ArtistModel extends Model
         });
     }
 
+
      public function generateSlug($name)
     {
         if (static::whereSlug($slug = Str::slug($name))->exists()) {
