@@ -5,9 +5,25 @@
 @endsection
 
 @section('main')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+<style>
+    .select2-container .select2-selection--single{
+        height: 40px;
+        background-color: inherit
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered{
+        color:#fff
+    }
+</style>
+
 <div class="container">
     <div class="justify-content-center">
         @if (count($errors) > 0)
@@ -33,17 +49,25 @@
                  @csrf
                  <div class="row">
                      <div class="col-md-2">
-                         
                      </div>
                       <div class="col-md-8">
-                         
-                    <div class="form-group" style="width:59%">
+                        <strong>Select product:</strong>
+                        <select class="productSelector" name="product_id">
+                            <option disabled selected >Select Product</option>
+                            @foreach ($products as $product)
+                            <option value="{{ $product->id }}">{{ $product->title }}</option>
+                            @endforeach
+                        </select>
+                    <div class="form-group" style="width:59%;margin-top:5px" >
                         <strong>Name:</strong>
                         {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
                          @if($errors->has('name'))
-                    <div class="error">{{ $errors->first('name') }}</div>
-                   @endif
+                            <div class="error">{{ $errors->first('name') }}</div>
+                        @endif
                     </div>
+
+                   
+
                     <div class="row clearfix m-t-20">
                     <div class="form-group">
                 <strong>Image:</strong>
@@ -61,6 +85,7 @@
 
             
         </div>
+           
          <button type="submit" class="btn btn-primary" style="margin-top: 50px;">Submit</button>
                    
                      </div> 
@@ -94,6 +119,8 @@
     $("#preview-img").change(function(){
         readURL(this);
     });
+
+    $('.productSelector').select2();
 </script>
 
 @endsection

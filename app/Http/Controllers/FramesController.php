@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\FramesModel;
+use App\Models\ProductModel;
 use DB;
 
 class FramesController extends Controller
@@ -24,6 +25,7 @@ class FramesController extends Controller
     public function index()
     {
        $data = FramesModel::orderBy('id','DESC')->paginate(50);
+
        return view('frames.index',compact('data'));
     }
 
@@ -34,7 +36,8 @@ class FramesController extends Controller
      */
     public function create()
     {
-        return view('frames.create');
+        $products = ProductModel::latest()->get();
+        return view('frames.create',compact('products'));
     }
 
     /**
@@ -47,22 +50,19 @@ class FramesController extends Controller
     {
 
          $request->validate([
+            'product_id' => 'required',
             'name' => 'required|unique:framemaster,name',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-  
         $input = $request->all();
-        
-  
+        // return $input;
         if ($image = $request->file('image')) {
             $destinationPath = public_path('') .'/image/frames/';
             $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $profileImage);
             $input['image'] = "$profileImage";
         }
-    
         FramesModel::create($input);
-     
         return redirect()->route('frames.index')
                         ->with('success','Frame created successfully.');
     }
@@ -86,8 +86,9 @@ class FramesController extends Controller
      */
     public function edit($id)
     {
+        $products = ProductModel::latest()->get();
          $frames = FramesModel::find($id);
-         return view('frames.update',compact('frames'));
+         return view('frames.update',compact('frames','products'));
     }
 
     /**
@@ -113,13 +114,8 @@ class FramesController extends Controller
         }else{
             unset($input['image']);
         }
-
-       
-
         $frames = FramesModel::find($id);
         $frames->update($input);
-
-    
         return redirect()->route('frames.index')
                         ->with('success','Frames updated successfully');
     }

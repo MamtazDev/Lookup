@@ -17,8 +17,13 @@ class FramesModel extends Model
         'image',
         'isactive',
         'isdeleted',
+        'product_id'
     ];
 
+    public function Product()
+    {
+     return $this->belongsTo('App\Models\ProductModel', 'product_id');
+    }  
     public static function getProdectsFrameByid($id = false)
     {
         $response = false;

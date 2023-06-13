@@ -4,6 +4,9 @@
 
 
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+
 
     <script>
         $(document).ready(function(){
@@ -120,7 +123,6 @@
                   @isset($products->artists)
                   <div ><a href="{{  url('/artist-details/'.$products->artists->slug)  }}" style="margin-right:5px;display:inline-block; text-decoration:underline;font-weight:bold;font-size:18px" >{{ $products->artists->firstname ?? "" }} {{ $products->artists->lastname ?? ""}},</a> 
                     <span>{{ $country['countryname'] }},{{$products->artists->created_at->format('Y')  }}</span>
-
                   </div>
                   @endisset
                   <p style="margin-top:8px" > {{$products['shortdescription'] }} <span>{{cmToIn($products['width'])  }} </span>X<span> {{ cmToIn($products['height']) }}in</span></p> 
@@ -430,13 +432,15 @@
               <div class="col-md-3">
                 <h2>About the Creator</h2>
                 <div class="creatorWrapper">
+                  @isset($products->artists)
                   <a href="{{  url('/artist-details/'.$products->artists->slug) }}">
-                    <img src="{{ url('image/artist/'.$products->artists->media)}}" height="100" alt="creator">
+                    <img src="{{ url('image/profile/'.$products->artists->profileimage)}}" height="100" alt="creator">
                     <div class="creator_info">
                         <h3>{{  $products->artists->firstname ?? "" }} {{ $products->artists->lastname ?? ""}}</h3>
                         <p>{{ $country['countryname']  }}</p>
                     </div>
                   </a> 
+                  @endisset
                 </div>
                 <div  class="creator-credentials">
                   <h3>Credentials</h3>
@@ -448,15 +452,45 @@
                 </div>
               </div>
               <div class="col-md-5">
-                  <p style="padding-top:20%">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit harum repellat molestias ipsum. Expedita, perferendis placeat qui, accusamus exercitationem asperiores praesentium repellendus id quisquam dolorum rem harum? Fugit, atque officia!</p>
-
+                  @isset($products->artists)
+                  <p style="padding-top:20%"> {{ $products->artists->bio }}</p>
                   <a style="font-weight: bold;margin-top:30px" href="{{  url('/artist-details/'.$products->artists->slug) }}"> Go to {{  $products->artists->firstname ?? "" }} {{ $products->artists->lastname ?? ""}} Page </a>
-
+                  @endisset
+                  
             </div>
+            @isset($products->artists)
             <div class="col-md-4">
               <img src="{{ url('image/artist/'.$products->artists->media)}}"  width="100%" alt="">
             </div>
+            @endisset
         </div>
+
+        {{-- Frames --}}
+        @if(isset($products->Frames) && !empty($products->Frames))
+        <div class="related-products-block">
+          <div class="box-content box">
+            <div class="page-title"><h3>Discover the creation in interiors
+            </h3></div>
+            <div class="block_box row">
+              <div class="box-product frame-carousel owl-carousel clearfix" data-items="4">
+              @foreach($products->Frames as $frame)
+                <div class="product-layout col-xs-12 item">
+                  <div class="product-thumb">
+                    <div class="image">
+                      <a class="image-popup" href="{{asset('image/frames/'.$frame['image'])}}">
+                          <img src="{{ asset('image/frames/'.$frame['image']) }}" alt="{{$frame['name'] }}" title="{{ $frame['name'] }}" class="img-responsive" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+              </div>
+            </div>
+          </div>
+        </div>
+        @endif
+        {{-- Frame --}}
+
           @if(isset($relatedProducts) && !empty($relatedProducts))
           <div class="related-products-block">
             <div class="box-content box">
@@ -1056,6 +1090,13 @@ $(document).ready(function(){
     });
 
 });
+
+$('.image-popup').magnificPopup({
+        type: 'image',
+        gallery: {
+            enabled: true
+        }
+    });
 </script>
 @extends('frontview.layouts.footer')
 @endsection

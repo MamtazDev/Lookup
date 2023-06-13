@@ -28,6 +28,7 @@
                     <thead class="thead-dark">
                         <tr>
                             <th>#</th>
+                            <th>Product</th>
                             <th>Name</th>
                             <th>Image</th>
                             <th>Status</th>
@@ -38,6 +39,7 @@
                         @foreach ($data as $key => $type)
                             <tr>
                                 <td>{{ $type->id }}</td>
+                                <td>{{ $type->Product->title ?? "-" }}</td>
                                 <td>{{ $type->name }}</td>
                                 <td><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
       <img height="120" width="150" class="img-thumbnail" src="{{url('/image/frames/'.$type->image)}}" id="preview">

@@ -5,9 +5,22 @@
 @endsection
 
 @section('main')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+<style>
+    .select2-container .select2-selection--single{
+        height: 40px;
+        background-color: inherit
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered{
+        color:#fff
+    }
+</style>
 <div class="container">
     <div class="justify-content-center">
         @if (count($errors) > 0)
@@ -52,7 +65,7 @@
                     </div>
 
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
 
                         <div class="form-group">
                         <strong>Name:</strong>
@@ -66,8 +79,13 @@
                         
                         
                     </div>
-                    <div class="col-md-3">
-                        
+                    <div class="col-md-6">
+                        <strong>Select product:</strong>
+                        <select class="productSelector" name="product_id">
+                            @foreach ($products as $product)
+                            <option {{ $product->id == $frames->product_id ? "selected": "" }} value="{{ $product->id }}">{{ $product->title }}</option>
+                            @endforeach
+                        </select>
                     </div>
                       
 
@@ -101,6 +119,7 @@
     $("#preview-img").change(function(){
         readURL(this);
     });
+    $('.productSelector').select2();
 </script>
 
 @endsection

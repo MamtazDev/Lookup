@@ -72,6 +72,10 @@ class ProductModel extends Model
    {
     return $this->hasMany('App\Models\ProductCategoryModel', 'parentcatid');
    }   
+    public function Frames()
+   {
+    return $this->hasMany('App\Models\FramesModel', 'product_id');
+   }   
 
     public function artists()
    {

@@ -74,9 +74,13 @@ class ProductController extends FrontController
         $data['ProductCategoryData'] = $ProductCategoryData;
         $data['currencies'] = $currencies;
 
-        $artists = ArtistModel::find($products->artists);
-        $data['country'] = $artists[0]->country;
-            // return $products->artists;
+
+        if($products->artists){
+            $artists = ArtistModel::find($products->artists);
+            $data['country'] = $artists[0]->country;
+        }
+    //    return $products->Frames;
+
         return view('frontview.product-detail',$data);
          }else{
             abort(404);
