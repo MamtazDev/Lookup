@@ -5,6 +5,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\productSizeController;
 
 use App\Http\Controllers\AdminUsers;
 
@@ -377,6 +378,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('permission', PermissionController::class);
 
     Route::resource('customer', CustomerController::class);
+    Route::resource('productSize', productSizeController::class);
 
     Route::resource('product-category', ProductCategoryController::class);
 

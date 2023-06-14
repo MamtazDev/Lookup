@@ -14,6 +14,7 @@ use App\Models\ColorCodeModel;
 use App\Models\SizeModel;
 use App\Models\ProductFrameModel;
 use App\Models\ArtistModel;
+use App\Models\ProductMediaModel;
 use Redirect,Response;
 use DB;
 
@@ -53,6 +54,7 @@ class ProductController extends FrontController
         $productsFrames = ProductFrameModel::getProdectsFrame($products['id']);
         $ratingCount = '';
         $ReviewCount = 0;
+        $productSizes = ProductMediaModel::where('productid',$products['id'])->get();
         foreach($ProdectsReview as $Review){
             $ratingCount = (int)$Review->rating + (int)$ratingCount;
             $ReviewCount++;
@@ -73,13 +75,13 @@ class ProductController extends FrontController
         $data['productsFrames'] = $productsFrames;
         $data['ProductCategoryData'] = $ProductCategoryData;
         $data['currencies'] = $currencies;
-
-
+        $data['productSizes'] = $productSizes;
+        
         if($products->artists){
             $artists = ArtistModel::find($products->artists);
             $data['country'] = $artists[0]->country;
         }
-    //    return $products->Frames;
+        // return $productSizes;
 
         return view('frontview.product-detail',$data);
          }else{
@@ -96,7 +98,6 @@ class ProductController extends FrontController
        if(isset($alias) && !empty($alias)){
         $data = [];
         $products = ProductModel::getProdectsdetailsbyId($alias);
-
         
         if(isset($products) && !empty($products)){
         $ignoeids[] = $products['id'];
@@ -115,7 +116,6 @@ class ProductController extends FrontController
         }else{
             $RatingData = 0;
         }
-
         $data['relatedProducts'] = $relatedProducts;
         $data['products'] = $products;
         $data['prodectimages'] = $prodectimages;
@@ -125,7 +125,6 @@ class ProductController extends FrontController
         // print_r($data);exit;
         $returnHTML = view('frontview.quick-view')->with($data)->render();
         return response()->json(['html' => "$returnHTML"]);
-
          }else{
             abort(404);
          }
@@ -145,10 +144,6 @@ class ProductController extends FrontController
         }else{
             return false;
         }
-        
-
-        
-
     }
 
 }

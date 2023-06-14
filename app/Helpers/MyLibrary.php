@@ -3197,5 +3197,25 @@ class MyLibrary {
     return $response ;
 }
 
+public function SizeSelectedImage(){
+    if(isset($_COOKIE['selectedSize']) && !empty($_COOKIE['selectedSize'])){
+        $selectedSize = $_COOKIE['selectedSize'];
+        $sizes = explode(",",$selectedSize);
+        $images = DB::table('productmedia')
+        ->where('productid',$sizes[2])
+        ->where('width',$sizes[1])
+        ->where('height',$sizes[0])
+        ->first();
+        return $images;
+      }else{
+        $selectedSize = null;
+      }
+}
+
+
+
+
+
+
 
 }
