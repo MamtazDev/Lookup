@@ -445,7 +445,6 @@ class ProductModel extends Model
             ->select('*')
             ->where('productid',$proId)
             ->first();
-
             return $response;
    }
 

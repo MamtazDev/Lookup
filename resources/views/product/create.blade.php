@@ -68,10 +68,9 @@
                     </div>
 
                     </div>
-                     @if($errors->has('media'))
-                         
-                    <div class="error" >{{ $errors->first('media') }}</div>
-                   @endif
+                     @if($errors->has('media'))  
+                     <div class="error" >{{ $errors->first('media') }}</div>
+                    @endif
 
                     <div class="user-image mb-3 text-center">
                          <div class="imgPreview"> </div>

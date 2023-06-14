@@ -293,6 +293,16 @@
           @endcan
            @can('products-list')
             <li class="nav-item">
+            <a href="{{ route('productSize.index') }}" class="nav-link">
+                 <!-- <i class="nav-icon fas fa-user-alt"></i> -->
+              <p>
+                <i class="far fa-circle nav-icon"></i>
+               Products Sizes 
+                <!-- <span class="right badge badge-danger">New</span> -->
+              </p>
+            </a>
+          </li>
+            <li class="nav-item">
             <a href="{{ route('product.index') }}" class="nav-link">
                  <!-- <i class="nav-icon fas fa-user-alt"></i> -->
               <p>

@@ -372,7 +372,6 @@ class ProductController extends Controller
         if($request->frame){
          foreach ($input['frame'] as $key => $value) {
              if(!empty($value)){
-                
                 $attribute = new ProductFrameModel;
                 $attribute->productid = $lastInsertedId;
                 $attribute->frameid = $value;
@@ -395,7 +394,6 @@ class ProductController extends Controller
                      $file->move(\public_path("/image/products"),$imageName);
                     $mediaurl = $upload_path.$imageName;
                     $imgData[] = $mediaurl;
-
 
                 }
 
@@ -543,13 +541,10 @@ class ProductController extends Controller
                 $files=$request->file("media");
                 foreach($files as $file){
                     $imageName=time().'_'.$file->getClientOriginalName();
-
                     $upload_path = 'public/image/products/';
                      $file->move(\public_path("/image/products"),$imageName);
                     $mediaurl = $upload_path.$imageName;
                     $imgData[] = $mediaurl;
-
-
                 }
 
                      $requests['mediaurl'] = implode('|', $imgData);

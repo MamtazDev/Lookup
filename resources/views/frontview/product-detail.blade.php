@@ -64,6 +64,17 @@
                       @endif
                     </div>
 
+                  @if(isset($_COOKIE['selectedSize']) && !empty($_COOKIE['selectedSize']))
+                    @php
+                     $images = $mylibrary->SizeSelectedImage();
+                    $imagesArr = explode("|",$images->mediaurl)
+                    @endphp
+
+              @endif
+
+            
+
+
                     @if(isset($prodectimages) && !empty($prodectimages))
                     <div id="additional-carousel" class="owl-carousel product-carousel owl-theme clearfix">
                       @php $imagesArr = explode("|",$prodectimages->mediaurl)@endphp
@@ -78,18 +89,19 @@
                           </a>
                         @endif
                       </div>
-                     <!--  @foreach($imagesArr as $image)
+                      {{-- sub gallary --}}
+                     @foreach($imagesArr as $image)
                         <div class="image-additional">
                           @if($products['artistid'] == '0')
-                            <a href="{{url('/'.$image)}}" title="{{ $products['title'] }}" class="elevatezoom-gallery" data-image="{{url('/'.$image)}}" data-zoom-image="{{url('/'.$image)}}">
-                              <img src="{{url('https://lakouphoto.ca/'.$image)}}" title="{{ $products['title'] }}" alt="{{ $products['title'] }}" width="80" height="100" class="img-width" />
+                            <a href="{{asset($image)}}" title="{{ $products['title'] }}" class="elevatezoom-gallery" data-image="{{asset($image)}}" data-zoom-image="{{asset($image)}}">
+                              <img src="{{asset($image)}}" title="{{ $products['title'] }}" alt="{{ $products['title'] }}" width="80" height="100" class="img-width" />
                             </a>
                           @else
-                            <a href="{{url('Artist/'.$image)}}" title="{{ $products['title'] }}" class="elevatezoom-gallery" data-image="{{url('Artist/'.$image)}}" data-zoom-image="{{url('Artist/'.$image)}}">
-                              <img src="{{url('https://lakouphoto.ca/Artist/'.$image)}}" title="{{ $products['title'] }}" alt="{{ $products['title'] }}" width="80" height="100" class="img-width" />
+                            <a href="{{asset($image)}}" title="{{ $products['title'] }}" class="elevatezoom-gallery" data-image="{{asset($image)}}" data-zoom-image="{{asset($image)}}">
+                              <img src="{{asset($image)}}" title="{{ $products['title'] }}" alt="{{ $products['title'] }}" width="80" height="100" class="img-width" />
                             </a>
                           @endif
-                        </div> -->
+                        </div> 
                       @endforeach
                     </div>
                     @else
@@ -100,7 +112,7 @@
                             <img src="{{url('https://lakouphoto.ca/public/image/products/'.$products['featuredimage'])}}" title="{{ $products['title'] }}" alt="{{ $products['title'] }}" width="80" height="100" class="img-width" />
                           </a>
                         @else
-                          <a href="{{url('https://lakouphoto.ca/Artist/public/image/products/'.$products['featuredimage'])}}" title="{{ $products['title'] }}" class="elevatezoom-gallery" data-image="{{url('https://lakouphoto.ca/Artist/public/image/products/'.$products['featuredimage'])}}" data-zoom-image="{{url('https://lakouphoto.ca/Artist/public/image/products/'.$products['featuredimage'])}}" >
+                          <a href="{{url('https://lakouphoto.ca/Artist/public/image/products/'.$products['featuredimage'])}}" title="{{ $products['title'] }}" class="elevatezoom-gallery" data-image="{{url('https://lakouphoto.ca/Artist/public/image/products/'.$products['featuredimage'])}}" data-zoom-image="{{url('https://lakouphoto.ca/Artist/public/image/products/'.$products['featuredimage'])}}">
                             <img src="{{url('https://lakouphoto.ca/Artist/public/image/products/'.$products['featuredimage'])}}" title="{{ $products['title'] }}" alt="{{ $products['title'] }}" width="80" height="100" class="img-width" />
                           </a>
                         @endif
@@ -115,7 +127,6 @@
                       $in = $cm/2.54;
                         return round($in,2);
                     }
-              
               @endphp   
               <div class="col-sm-6 right_info">
                 <div class="right-info-inner">
@@ -177,9 +188,6 @@
                   }else{
                     $currencyCode = 'USD';
                   }
-                  
-          
-             
                  @endphp
                   <ul class="list-unstyled">
                     <li>
@@ -193,12 +201,26 @@
                          <form style="margin-top: -20px;">
                       
               <select class="currency" style="margin-left: 150px;">
-                  <!-- <option value="">Currency</option> -->
                   @foreach ($currencies as $currency)
-                  <option value="{{ $currency['Currency_code'] }}" {{ $currencyCode === $currency['Currency_code'] ? "selected": "" }}>{{ $currency['Currency_code'] }}</option>
+                  <option value="{{ $currency['Currency_code'] }}" {{ $currencyCode === $currency['Currency_code'] ? "selected": "" }}>
+                    {{ $currency['Currency_code'] }}
+                  </option>
                   @endforeach
-               
-                
+              </select>
+              {{-- cmToIn --}}
+              @php
+                  if(isset($_COOKIE['selectedSize']) && !empty($_COOKIE['selectedSize'])){
+                   $selectedSize = $_COOKIE['selectedSize'];
+                  }
+              @endphp
+              <select class="product_sizes" name="product_sizes" >
+                @foreach ($productSizes as $size)
+                @php
+                $array = array($size['width'], $size['height'],$size['productid']);
+                $sizes = implode(",", $array);
+                @endphp
+                <option {{ $sizes === $selectedSize ? "selected" : "" }} value="{{ $sizes }}"> {{ cmToIn($size['width'])}}x{{cmToIn($size['height'] ) }} in</option>                    
+                @endforeach
               </select>
     </form>
                               <!-- <div class="dropdown">
@@ -274,10 +296,8 @@
                     </div>
                   </div>
                   @endif
-
                   <!-- <hr /> -->
                   <!-- frames section -->
-
                   <div id="product" class="product-options">
                     @if(isset($products['availability']) && $products['availability'] && $products['availability'] == 'In stock')
                     <div class="form-group">
@@ -427,6 +447,34 @@
               </div>
             </div>
           </div>
+
+                  {{-- Frames --}}
+        @if(isset($products->Frames) && !empty($products->Frames))
+        <div class="related-products-block frames">
+          <div class="box-content box">
+            <div class="page-title"><h3>Discover the creation in interiors
+            </h3></div>
+            <div class="block_box row">
+              <div class="box-product frame-carousel owl-carousel clearfix" data-items="4">
+              @foreach($products->Frames as $frame)
+                <div class="product-layout col-xs-12 item">
+                  <div class="product-thumb">
+                    <div class="image">
+                      <a class="image-popup" href="{{asset('image/frames/'.$frame['image'])}}">
+                          <img src="{{ asset('image/frames/'.$frame['image']) }}" alt="{{$frame['name'] }}" title="{{ $frame['name'] }}" class="img-responsive" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+              </div>
+            </div>
+          </div>
+        </div>
+        @endif
+        {{-- Frame --}}
+
+          {{-- About Creator --}}
           <div class="about-the-creator-section mt-5">
             <div class="row">
               <div class="col-md-3">
@@ -463,38 +511,19 @@
               <img src="{{ url('image/artist/'.$products->artists->media)}}"  width="100%" alt="">
             </div>
             @endisset
-        </div>
-
-        {{-- Frames --}}
-        @if(isset($products->Frames) && !empty($products->Frames))
-        <div class="related-products-block">
-          <div class="box-content box">
-            <div class="page-title"><h3>Discover the creation in interiors
-            </h3></div>
-            <div class="block_box row">
-              <div class="box-product frame-carousel owl-carousel clearfix" data-items="4">
-              @foreach($products->Frames as $frame)
-                <div class="product-layout col-xs-12 item">
-                  <div class="product-thumb">
-                    <div class="image">
-                      <a class="image-popup" href="{{asset('image/frames/'.$frame['image'])}}">
-                          <img src="{{ asset('image/frames/'.$frame['image']) }}" alt="{{$frame['name'] }}" title="{{ $frame['name'] }}" class="img-responsive" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              @endforeach
-              </div>
-            </div>
           </div>
-        </div>
-        @endif
-        {{-- Frame --}}
-
+          {{-- About Creator --}}
           @if(isset($relatedProducts) && !empty($relatedProducts))
           <div class="related-products-block">
             <div class="box-content box">
-              <div class="page-title"><h3>Related Products</h3></div>
+              @isset($products->artists)
+              <div class="page-title"><h3>Other Artworks by <a href="{{  url('/artist-details/'.$products->artists->slug) }}">
+                {{  $products->artists->firstname ?? "" }} {{ $products->artists->lastname ?? ""}}
+              </a>  </h3></div>
+               @else
+               <div class="page-title"><h3>Related Products </h3></div>
+              @endisset
+              
               <div class="block_box row">
                 <div id="related-carousel" class="box-product product-carousel owl-carousel clearfix" data-items="4">
                 @foreach($relatedProducts as $related)
@@ -1087,6 +1116,14 @@ $(document).ready(function(){
         var selectedCountry = $(this).children("option:selected").val();
         // alert("You have selected the country - " + selectedCountry);
         changeCurrancy(selectedCountry);
+    });
+
+    $("select.product_sizes").change(function(){
+        var selectedSize = $(this).children("option:selected").val();
+        // alert("You have selected the country - " + selectedCountry);
+        // changeCurrancy(selectedCountry);
+        // console.log('selectedSize',selectedSize)
+        changeSizes(selectedSize)
     });
 
 });

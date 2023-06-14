@@ -16,8 +16,12 @@ class ProductMediaModel extends Model
         'mediaurl',
         'filetype',
         'mediatype',
+        'height',
+        'width',
      ];
-
+     public function Product() {
+        return $this->belongsTo('App\Models\ProductModel','productid');
+    }
 
     public static function getimagesbyProductId($id){
         
